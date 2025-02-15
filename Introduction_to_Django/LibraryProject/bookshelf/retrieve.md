@@ -3,6 +3,6 @@
 ```python
 from bookshelf.models import Book
 
-# Retrieve all books
-books = Book.objects.all()
-print(books)  # Output should list all books
+# Retrieve the book by title
+book = Book.objects.get(title="1984")
+print(book)  # Output should display book details
