@@ -1,4 +1,3 @@
-
 #### **🗑 delete.md**
 ```md
 # Delete Book
