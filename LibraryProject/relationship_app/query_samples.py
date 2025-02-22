@@ -1,30 +1,30 @@
 import os
 import django
 
-# Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django-models.settings")
+# Ensure Django is set up correctly
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
-from relationship_app.models import Author, Book, Library, Librarian
+from relationship_app.models import Author, Book
 
-# 1️⃣ Query all books by a specific author
-def books_by_author(author_name):
-    author = Author.objects.get(name=author_name)
-    books = author.books.all()
-    return books
+# Ensure the author exists before querying
+author, created = Author.objects.get_or_create(name="George Orwell")
 
-# 2️⃣ List all books in a library
-def books_in_library(library_name):
-    library = Library.objects.get(name=library_name)
-    return library.books.all()
+# If created, print confirmation
+if created:
+    print(f"Added new author: {author.name}")
+else:
+    print(f"Author already exists: {author.name}")
 
-# 3️⃣ Retrieve the librarian for a library
-def librarian_of_library(library_name):
-    library = Library.objects.get(name=library_name)
-    return library.librarian
+# Ensure some books exist
+book1, created1 = Book.objects.get_or_create(title="1984", author=author)
+book2, created2 = Book.objects.get_or_create(title="Animal Farm", author=author)
 
-# Example usage:
-if __name__ == "__main__":
-    print("Books by George Orwell:", books_by_author("George Orwell"))
-    print("Books in City Library:", books_in_library("City Library"))
-    print("Librarian of Central Library:", librarian_of_library("Central Library"))
+if created1:
+    print(f"Added book: {book1.title}")
+if created2:
+    print(f"Added book: {book2.title}")
+
+# Fetch and print books by George Orwell
+books = Book.objects.filter(author=author)
+print("Books by George Orwell:", list(books))
