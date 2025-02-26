@@ -15,7 +15,7 @@ urlpatterns = [
     path('member-view/', member_view, name='member_view'),
 ]
 urlpatterns = [
-    path('add-book/', add_book, name='add_book'),
+    path('add_book/', views.add_book, name='add_book'),
     path('edit_book/<int:book_id>/', views.edit_book, name='edit_book'),
     path('delete-book/<int:book_id>/', delete_book, name='delete_book'),
 ]
