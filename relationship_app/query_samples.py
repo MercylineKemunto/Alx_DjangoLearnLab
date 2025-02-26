@@ -1,30 +1,28 @@
 import os
 import django
 
-# Setup Django environment
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django-models.settings")
+# Set up Django environment
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LibraryProject.settings')
 django.setup()
 
-from relationship_app.models import Author, Book, Library, Librarian
+from relationship_app.models import Author, Book, Library
 
-# 1️⃣ Query all books by a specific author
 def books_by_author(author_name):
-    author = Author.objects.get(name=author_name)
-    books = author.books.all()
-    return books
+    """Fetch all books written by a specific author."""
+    try:
+        author = Author.objects.get(name=author_name)
+        return list(Book.objects.filter(author=author).values('title', 'publication_year'))
+    except Author.DoesNotExist:
+        return f"No books found for author: {author_name}"
 
-# 2️⃣ List all books in a library
 def books_in_library(library_name):
-    library = Library.objects.get(name=library_name)
-    return library.books.all()
+    """Fetch all books available in a specific library."""
+    try:
+        library = Library.objects.get(name=library_name)
+        return list(library.books.all().values('title', 'author__name', 'publication_year'))
+    except Library.DoesNotExist:
+        return f"Library '{library_name}' does not exist."
 
-# 3️⃣ Retrieve the librarian for a library
-def librarian_of_library(library_name):
-    library = Library.objects.get(name=library_name)
-    return library.librarian
-
-# Example usage:
 if __name__ == "__main__":
     print("Books by George Orwell:", books_by_author("George Orwell"))
-    print("Books in City Library:", books_in_library("City Library"))
-    print("Librarian of Central Library:", librarian_of_library("Central Library"))
+    print("Books in Central Library:", books_in_library("Central Library"))
