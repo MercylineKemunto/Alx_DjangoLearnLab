@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'relationship_app',
+    'bookshelf', 
     'django.contrib.staticfiles',
 ]
 
