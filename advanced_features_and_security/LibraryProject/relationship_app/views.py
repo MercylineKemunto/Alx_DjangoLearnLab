@@ -13,6 +13,8 @@ from .models import Book
 from .forms import BookForm
 from django.contrib.auth.decorators import permission_required
 
+
+
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})

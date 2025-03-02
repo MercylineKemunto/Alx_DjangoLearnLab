@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Book
 from django.core.exceptions import PermissionDenied
+from .forms import ExampleForm
 
 def book_list(request):
     if not request.user.has_perm('bookshelf.can_view'):
