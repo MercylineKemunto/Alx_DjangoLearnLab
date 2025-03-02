@@ -141,3 +141,15 @@ SESSION_COOKIE_SECURE = True  # Prevents session hijacking
 CSP_DEFAULT_SRC = ("'self'",)  # Only allow scripts from your domain
 CSP_SCRIPT_SRC = ("'self'",)  # Restrict inline scripts
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True  
+
+# Enforce HTTPS using HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to subdomains
+SECURE_HSTS_PRELOAD = True  # Allow preloading of HSTS in browsers
+
+# Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True  
+CSRF_COOKIE_SECURE = True  

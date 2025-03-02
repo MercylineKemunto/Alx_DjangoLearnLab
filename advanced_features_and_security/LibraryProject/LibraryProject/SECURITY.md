@@ -119,3 +119,26 @@ Edit
 git add LibraryProject/SECURITY.md
 git commit -m "Added SECURITY.md with security best practices"
 git push origin main
+
+# Django Security Best Practices
+
+## 1. Enforcing HTTPS
+- `SECURE_SSL_REDIRECT = True` redirects all HTTP requests to HTTPS.
+- HSTS settings are applied to prevent accidental HTTP access.
+
+## 2. Secure Cookies
+- `SESSION_COOKIE_SECURE = True`
+- `CSRF_COOKIE_SECURE = True`
+
+## 3. Security Headers
+- `X_FRAME_OPTIONS = "DENY"` prevents clickjacking attacks.
+- `SECURE_CONTENT_TYPE_NOSNIFF = True` prevents MIME type sniffing.
+- `SECURE_BROWSER_XSS_FILTER = True` enables browser XSS filtering.
+
+## 4. Deployment Considerations
+- Ensure SSL certificates are installed for HTTPS.
+- Configure Nginx/Apache to redirect HTTP to HTTPS.
+
+## 5. Security Review
+- Manually test the application for HTTP to HTTPS redirection.
+- Validate that security headers are applied using browser developer tools.
