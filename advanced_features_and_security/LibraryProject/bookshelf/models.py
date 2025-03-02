@@ -60,4 +60,5 @@ class Meta:
         permissions = [
             ("can_create", "Can create objects"),
             ("can_delete", "Can delete objects"),
+            ("can_view", "Can view books"),
         ]
