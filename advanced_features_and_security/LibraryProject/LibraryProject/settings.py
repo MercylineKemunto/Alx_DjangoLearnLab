@@ -153,3 +153,5 @@ SECURE_HSTS_PRELOAD = True  # Allow preloading of HSTS in browsers
 # Ensure cookies are only sent over HTTPS
 SESSION_COOKIE_SECURE = True  
 CSRF_COOKIE_SECURE = True  
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
