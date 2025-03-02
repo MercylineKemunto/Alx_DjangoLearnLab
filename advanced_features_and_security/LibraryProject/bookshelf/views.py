@@ -10,3 +10,6 @@ def book_list(request):
     books = Book.objects.all()
     return render(request, 'bookshelf/book_list.html', {'books': books})
 
+def raise_exception():
+    """Raise a PermissionDenied exception for unauthorized access."""
+    raise PermissionDenied("You do not have permission to view this page.")
