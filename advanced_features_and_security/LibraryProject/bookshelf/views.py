@@ -14,3 +14,12 @@ def book_list(request):
 def raise_exception():
     """Raise a PermissionDenied exception for unauthorized access."""
     raise PermissionDenied("You do not have permission to view this page.")
+
+def form_example_view(request):
+    if request.method == 'POST':
+        # Handle form submission
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        # Process the data (e.g., save to database)
+    
+    return render(request, 'bookshelf/form_example.html')
