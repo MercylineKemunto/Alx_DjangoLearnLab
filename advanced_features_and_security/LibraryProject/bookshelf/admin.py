@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import CustomUser
+from bookshelf.models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -19,4 +20,4 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email', 'username')
     ordering = ('email',)
 
-admin.site.register(CustomUser, CustomUserAdmin)
+#admin.site.register(CustomUser, CustomUserAdmin)

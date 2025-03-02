@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 class Author(models.Model):
     name = models.CharField(max_length=255)
@@ -22,6 +22,7 @@ class Book(models.Model):
             ("can_add_book", "Can add book"),
             ("can_change_book", "Can edit book"),
             ("can_delete_book", "Can delete book"),
+            
         ]
 
     def __str__(self):
@@ -85,14 +86,9 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
 class CustomUser(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
 
-    objects = CustomUserManager()
-
-    def __str__(self):
-        return self.username
-
-    
+    groups = models.ManyToManyField(Group, related_name='customuser_groups', blank=True)
+    user_permissions = models.ManyToManyField(Permission, related_name='customuser_permissions', blank=True)  

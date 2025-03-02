@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import permission_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Book
 from .forms import BookForm
+from django.contrib.auth.decorators import permission_required
 
 def list_books(request):
     books = Book.objects.all()
