@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u_zg810sf5!eje()fan5o^f*o_897o2qufovq_zg!8b+rzr^&l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yourdomain.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'relationship_app',
     'bookshelf', 
     'django.contrib.staticfiles',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -127,3 +129,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_BROWSER_XSS_FILTER = True  
+X_FRAME_OPTIONS = 'DENY'  
+SECURE_CONTENT_TYPE_NOSNIFF = True  
+
+# Enforcing secure cookies
+CSRF_COOKIE_SECURE = True  # Ensures CSRF tokens are only sent over HTTPS
+SESSION_COOKIE_SECURE = True  # Prevents session hijacking
+
+CSP_DEFAULT_SRC = ("'self'",)  # Only allow scripts from your domain
+CSP_SCRIPT_SRC = ("'self'",)  # Restrict inline scripts
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
