@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from django_filters import rest_framework as filters
+from rest_framework import filters
 from rest_framework.filters import OrderingFilter  # Added OrderingFilter import
 from .models import Book
 from .serializers import BookSerializer
