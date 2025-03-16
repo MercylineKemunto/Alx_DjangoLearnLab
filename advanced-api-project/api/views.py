@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Author, Book
@@ -24,26 +24,32 @@ class BookViewSet(ModelViewSet):
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-# Class-based views for template-based rendering
+class AuthorListView(ListView):
+    model = Author
+    template_name = 'author_list.html'
+    context_object_name = 'authors'
+
 class AuthorDetailView(DetailView):
     model = Author
     template_name = 'author_detail.html'
+    context_object_name = 'author'
 
 class AuthorCreateView(CreateView):
     model = Author
     fields = ['name', 'bio']
     template_name = 'author_form.html'
+    success_url = '/'  # Update as needed
 
 class AuthorUpdateView(UpdateView):
     model = Author
     fields = ['name', 'bio']
     template_name = 'author_form.html'
+    success_url = '/'  # Update as needed
 
 class AuthorDeleteView(DeleteView):
     model = Author
     template_name = 'author_confirm_delete.html'
-    success_url = '/'  # Redirect to homepage or author list after deletion
-
+    success_url = '/'  # Update as needed
 
 
 
