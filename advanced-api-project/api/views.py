@@ -1,55 +1,32 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from .models import Author, Book
-from .serializers import AuthorSerializer, BookSerializer
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from .models import Book
+from .serializers import BookSerializer
+from rest_framework import generics
 
-class AuthorViewSet(ModelViewSet):
-    """
-    API endpoint that allows authors to be viewed, created, updated, or deleted.
-    - Read access is available to unauthenticated users.
-    - Write access (create, update, delete) is restricted to authenticated users.
-    """
-    queryset = Author.objects.all()
-    serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class BookListView(ListView):
+    model = Book
+    template_name = 'books/book_list.html'
+    context_object_name = 'books'
 
-class BookViewSet(ModelViewSet):
-    """
-    API endpoint that allows books to be viewed, created, updated, or deleted.
-    - Read access is available to unauthenticated users.
-    - Write access (create, update, delete) is restricted to authenticated users.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class BookDetailView(DetailView):
+    model = Book
+    template_name = 'books/book_detail.html'
 
-class AuthorListView(ListView):
-    model = Author
-    template_name = 'author_list.html'
-    context_object_name = 'authors'
+class BookCreateView(CreateView):
+    model = Book
+    fields = ['title', 'author']
+    template_name = 'books/book_form.html'
 
-class AuthorDetailView(DetailView):
-    model = Author
-    template_name = 'author_detail.html'
-    context_object_name = 'author'
+class BookUpdateView(UpdateView):
+    model = Book
+    fields = ['title', 'author']
+    template_name = 'books/book_form.html'
 
-class AuthorCreateView(CreateView):
-    model = Author
-    fields = ['name', 'bio']
-    template_name = 'author_form.html'
-    success_url = '/'  # Update as needed
+class BookDeleteView(DeleteView):
+    model = Book
+    template_name = 'books/book_confirm_delete.html'
 
-class AuthorUpdateView(UpdateView):
-    model = Author
-    fields = ['name', 'bio']
-    template_name = 'author_form.html'
-    success_url = '/'  # Update as needed
-
-class AuthorDeleteView(DeleteView):
-    model = Author
-    template_name = 'author_confirm_delete.html'
-    success_url = '/'  # Update as needed
 
 
 
