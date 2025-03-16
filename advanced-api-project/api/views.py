@@ -5,11 +5,13 @@ from rest_framework.filters import OrderingFilter  # Added OrderingFilter import
 from .models import Book
 from .serializers import BookSerializer
 from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
 
-class BookListView(ListView):
-    model = Book
-    template_name = 'books/book_list.html'
-    context_object_name = 'books'
+
+class BookListView(generics.ListAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
 
 class BookDetailView(DetailView):
     model = Book
@@ -30,5 +32,8 @@ class BookDeleteView(DeleteView):
     template_name = 'books/book_confirm_delete.html'
 
 
-
+ # Enable filtering, searching, and ordering
+    filterset_fields = ['title', 'author__name', 'publication_year']
+    search_fields = ['title', 'author__name']
+    ordering_fields = ['title', 'publication_year']
 
