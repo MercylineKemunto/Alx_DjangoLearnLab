@@ -1,8 +1,6 @@
+from django.views.generic import DetailView, CreateView, UpdateView, DeleteView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from django_filters import rest_framework as filters
-
 from .models import Author, Book
 from .serializers import AuthorSerializer, BookSerializer
 
@@ -15,8 +13,6 @@ class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['name']  # Example filtering by author's name
 
 class BookViewSet(ModelViewSet):
     """
@@ -27,17 +23,26 @@ class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['title', 'author']  # Example filtering by book title and author
 
-class BookListView(generics.ListAPIView):
-    """
-    API endpoint to list books with filtering support.
-    """
-    queryset = Book.objects.all()
-    serializer_class = BookSerializer
-    filter_backends = [filters.DjangoFilterBackend]
-    filterset_fields = ['title', 'author']
+# Class-based views for template-based rendering
+class AuthorDetailView(DetailView):
+    model = Author
+    template_name = 'author_detail.html'
+
+class AuthorCreateView(CreateView):
+    model = Author
+    fields = ['name', 'bio']
+    template_name = 'author_form.html'
+
+class AuthorUpdateView(UpdateView):
+    model = Author
+    fields = ['name', 'bio']
+    template_name = 'author_form.html'
+
+class AuthorDeleteView(DeleteView):
+    model = Author
+    template_name = 'author_confirm_delete.html'
+    success_url = '/'  # Redirect to homepage or author list after deletion
 
 
 
