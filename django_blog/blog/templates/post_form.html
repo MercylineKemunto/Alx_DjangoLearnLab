@@ -1,11 +1,12 @@
-{% extends "base_generic.html" %}
+{% extends 'base.html' %}
+
+{% block title %}{{ form_title }}{% endblock %}
 
 {% block content %}
-  <h1>{{ view.object.pk|yesno:"Edit Post,Create Post" }}</h1>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-  </form>
-  <a href="{% url 'post-list' %}">Cancel</a>
+    <h2>{{ form_title }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
 {% endblock %}
