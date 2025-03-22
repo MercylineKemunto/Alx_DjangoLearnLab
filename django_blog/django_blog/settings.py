@@ -53,8 +53,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'blog_db',  
-        'USER': 'admin',  
-        'PASSWORD': 'orina3181',  
+        'USER': 'root',  
+        'PASSWORD': 'Orina.duncan3181',  
         'HOST': 'localhost',  
         'PORT': '3306',  
     }
@@ -87,7 +87,5 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # Used for `collectstatic`
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]  # Custom static files directory
