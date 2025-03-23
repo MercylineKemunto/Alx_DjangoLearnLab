@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import search_posts, posts_by_tag
 from .views import (
     PostListView,
     PostDetailView,
@@ -21,7 +22,10 @@ urlpatterns = [
     path('post/<int:pk>/comments/new/', CommentCreateView.as_view(), name='comment-create'),
     path('comment/<int:pk>/update/', CommentUpdateView.as_view(), name='comment-update'),
     path('comment/<int:pk>/delete/', CommentDeleteView.as_view()),
+
+    path("search/", search_posts, name="search"),
+    path("tag/<slug:slug>/", posts_by_tag, name="posts-by-tag"),
     
-::contentReference[oaicite:28]{index=28}
+
 ]
 
