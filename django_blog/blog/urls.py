@@ -5,6 +5,8 @@ from .views import (
     PostCreateView,
     PostUpdateView,
     PostDeleteView,
+    CommentEditView,
+    CommentDeleteView,
     home
 )
 
@@ -15,5 +17,8 @@ urlpatterns = [
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
     path('home/', home, name='home'),
+     path('comment/<int:pk>/edit/', CommentEditView.as_view(), name='comment-edit'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view()),
+::contentReference[oaicite:28]{index=28}
 ]
 
