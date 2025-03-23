@@ -126,6 +126,17 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return reverse_lazy('post-detail', kwargs={'pk': comment.post.pk})
 
 
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # Adjust based on your template structure
+    context_object_name = 'posts'
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        return Post.objects.filter(tags=tag)
+
+
 
 def search_posts(request):
     query = request.GET.get("q")
