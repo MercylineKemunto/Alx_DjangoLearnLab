@@ -20,7 +20,7 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'blog/post_detail.html'  # Specify your template name
 
-     def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
         comments = Comment.objects.filter(post=self.get_object()).order_by('-created_at')
         data['comments'] = comments
@@ -70,18 +70,8 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         post = self.get_object()
         return self.request.user == post.author
-class CommentEditView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Comment
-    form_class = CommentForm
-    template_name = 'blog/comment_form.html'
+    
 
-    def form_valid(self, form):
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-    def test_func(self):
-        comment = self.get_object()
-        return self.request.user == comment.author
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
@@ -91,3 +81,34 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+class CommentCreateView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'  # Ensure this template exists
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        form.instance.post_id = self.kwargs['pk']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': self.kwargs['pk']})
+    
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'blog/comment_form.html'  # Ensure this template exists
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.author
+
+    def get_success_url(self):
+        return reverse_lazy('post-detail', kwargs={'pk': comment.post.pk})
+
+
