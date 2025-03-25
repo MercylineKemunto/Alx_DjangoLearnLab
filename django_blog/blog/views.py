@@ -50,6 +50,7 @@ class PostDetailView(DetailView):
                 comment.post = post
                 comment.save()
                 return redirect('post-detail', pk=post.pk)
+            
         return self.get(self, request, *args, **kwargs)
 
 class PostCreateView(LoginRequiredMixin, CreateView):
