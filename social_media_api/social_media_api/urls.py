@@ -44,4 +44,5 @@ urlpatterns = [
     path('', RootView.as_view(), name='api-root'),  # Add this line for root URL
     path('admin/', admin.site.urls),
     path('api/accounts/', include('accounts.urls')),
+    path('api/', include('posts.urls')),
 ]
