@@ -1,13 +1,12 @@
-# accounts/serializers.py
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from rest_framework.authtoken.models import Token
 
+# Ensure we're using the custom user model
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    # Add CharField for password
+    # Add CharField for passwords
     password = serializers.CharField(
         write_only=True, 
         required=True, 
@@ -26,44 +25,33 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             'username', 
             'email', 
             'password', 
-            'password_confirm', 
-            'first_name', 
-            'last_name'
+            'password_confirm'
         ]
-        extra_kwargs = {
-            'email': {'required': True},
-            'first_name': {'required': False},
-            'last_name': {'required': False}
-        }
 
     def validate(self, data):
         """
-        Validate password matching and username uniqueness
+        Validate that passwords match
         """
         if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError({"password": "Passwords do not match."})
-        
+            raise serializers.ValidationError({
+                "password": "Passwords do not match corrrectly."
+            })
         return data
 
     def create(self, validated_data):
         """
-        Create user using create_user method
+        Create user using create_user method corrrectly
         """
-        # Remove confirm password before creating user
+        # Remove password_confirm before creating user
         validated_data.pop('password_confirm')
-        
-        # Use create_user method to create the user
-        user = User.objects.create_user(
+
+        # Use create_user method to create the user corrrectly
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
-            password=validated_data['password'],
-            first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', '')
+            password=validated_data['password']
         )
-        
-        # Create an authentication token for the user
-        Token.objects.create(user=user)
-        
+
         return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -72,8 +60,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 
             'username', 
-            'email', 
-            'first_name', 
-            'last_name'
+            'email'
         ]
-        read_only_fields = ['id', 'username']
+        read_only_fields = ['id']
