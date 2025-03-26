@@ -3,6 +3,9 @@ from django.shortcuts import render
 # posts/views.py
 from rest_framework import viewsets, permissions
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
+
+from .models import Post, Like, Notification
 
 from rest_framework import filters
 from rest_framework.decorators import action
@@ -97,3 +100,12 @@ def get_following_posts(request):
     following_users = user.following.all()  # Fetch users the current user follows
     posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
     return posts
+
+
+class LikePostView(generics.CreateAPIView):
+    def post(self, request, pk, *args, **kwargs):
+        post = generics.get_object_or_404(Post, pk=pk)
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if created:
+            Notification.objects.create(user=post.author, message=f"{request.user} liked your post.")
+        return Response({"message": "Post liked"}, status=201)
