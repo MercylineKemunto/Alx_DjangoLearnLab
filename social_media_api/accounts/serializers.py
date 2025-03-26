@@ -5,6 +5,8 @@ from rest_framework.authtoken.models import Token
 
 # Ensure we're using the custom user model
 User = get_user_model()
+username = serializers.CharField() 
+
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
