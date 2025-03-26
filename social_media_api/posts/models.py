@@ -3,6 +3,37 @@
 from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+
+class Like(models.Model):
+    """
+    Model to track likes on posts
+    """
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='likes'
+    )
+    post = models.ForeignKey(
+        'Post', 
+        on_delete=models.CASCADE, 
+        related_name='likes'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'post')  # Prevent multiple likes from same user
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} likes {self.post.title}"
+
+    def clean(self):
+        """
+        Validate that a user cannot like their own post
+        """
+        if self.user == self.post.author:
+            raise ValidationError("Users cannot like their own posts")
 
 class Post(models.Model):
     """

@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.authtoken.models import Token
 from .models import CustomUser
+from posts.models import Like, Post
+from notifications.models import Notification
 
 class UserSerializer(serializers.ModelSerializer):
     followers_count = serializers.SerializerMethodField()
@@ -114,3 +116,48 @@ class UserProfileSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email']
         read_only_fields = ['id']
+
+class FollowSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
+    
+    class Meta:
+        model = Like
+        fields = ['id', 'user', 'post', 'created_at']
+        read_only_fields = ['created_at']
+
+class NotificationSerializer(serializers.ModelSerializer):
+    actor = serializers.SerializerMethodField()
+    target_details = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Notification
+        fields = [
+            'id', 
+            'recipient', 
+            'actor', 
+            'verb', 
+            'target_details', 
+            'timestamp', 
+            'is_read'
+        ]
+    
+    def get_actor(self, obj):
+        return {
+            'id': obj.actor.id,
+            'username': obj.actor.username
+        }
+    
+    def get_target_details(self, obj):
+        """
+        Retrieve details of the target object based on content type
+        """
+        try:
+            if obj.verb == 'like':
+                return {
+                    'post_id': obj.target.id,
+                    'post_title': obj.target.title
+                }
+            # Add more specific handling for other notification types
+            return {}
+        except:
+            return {}

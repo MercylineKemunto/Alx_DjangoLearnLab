@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 
 class CustomUser(AbstractUser):
-    bio = models.TextField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=False)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     followers = models.ManyToManyField("self", symmetrical=False, related_name="followers", blank=True)
 

@@ -314,3 +314,53 @@ Include usage examples in README.md.
 - Users cannot follow themselves
 - Feed shows most recent posts first
 - Feed returns an empty list with a message if no posts are available
+# Likes and Notifications Feature Documentation
+
+## Likes Functionality
+
+### Like a Post
+- **Endpoint:** `POST /posts/<post_id>/like/`
+- **Authentication:** Required
+- **Description:** Allow a user to like a post
+- **Restrictions:** 
+  - Cannot like own posts
+  - Cannot like a post multiple times
+- **Response:**
+  - `201 CREATED`: Successfully liked the post
+  - `400 BAD REQUEST`: Attempted to like own post
+
+### Unlike a Post
+- **Endpoint:** `POST /posts/<post_id>/unlike/`
+- **Authentication:** Required
+- **Description:** Allow a user to remove a like from a post
+- **Response:**
+  - `200 OK`: Successfully unliked or post was not previously liked
+
+## Notifications System
+
+### Retrieve Notifications
+- **Endpoint:** `GET /notifications/`
+- **Authentication:** Required
+- **Description:** Retrieve user's notifications
+- **Features:**
+  - Automatically marks unread notifications as read upon retrieval
+  - Provides details about notification type, actor, and target
+
+### Notification Types
+- `like`: Notification when someone likes a user's post
+- `comment`: Notification when someone comments on a user's post
+- `follow`: Notification when someone follows a user
+
+### Notification Object Structure
+- `id`: Unique identifier
+- `recipient`: User receiving the notification
+- `actor`: User who performed the action
+- `verb`: Type of notification
+- `target_details`: Additional context about the notification
+- `timestamp`: When the notification was created
+- `is_read`: Read status of the notification
+
+## Implementation Notes
+- Notifications are automatically generated for likes
+- Unread notifications are marked as read when viewed
+- Generic content type allows flexibility for future notification types

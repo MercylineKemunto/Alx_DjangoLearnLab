@@ -14,6 +14,7 @@ from rest_framework import generics, permissions, status
 
 from django.shortcuts import get_object_or_404
 from .models import CustomUser
+from .serializers import FollowSerializer
 
 
 generics.GenericAPIView
@@ -109,3 +110,39 @@ class UserProfileView(APIView):
             return Response(serializer.data)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class FollowUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        """Follow a user."""
+        user_to_follow = get_object_or_404(CustomUser, id=user_id)
+        request.user.follow(user_to_follow)
+        return Response({"message": "Followed successfully"}, status=status.HTTP_200_OK)
+
+class UnfollowUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        """Unfollow a user."""
+        user_to_unfollow = get_object_or_404(CustomUser, id=user_id)
+        request.user.unfollow(user_to_unfollow)
+        return Response({"message": "Unfollowed successfully"}, status=status.HTTP_200_OK)
+
+class FollowersListView(APIView):
+    """Get a list of followers for a user."""
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)
+        followers = user.followers.all()
+        serializer = FollowSerializer(followers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class FollowingListView(APIView):
+    """Get a list of users that a user is following."""
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)
+        following = user.following.all()
+        serializer = FollowSerializer(following, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

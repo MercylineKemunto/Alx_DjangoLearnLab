@@ -9,9 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-
-
-Post.objects.filter(author__in=following_users).order_by
+from django.contrib.auth import get_user_model
 
 class FeedView(generics.ListAPIView):
     serializer_class = PostSerializer
@@ -90,3 +88,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+User = get_user_model()
+
+def get_following_posts(request):
+    user = request.user
+    following_users = user.following.all()  # Fetch users the current user follows
+    posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+    return posts
