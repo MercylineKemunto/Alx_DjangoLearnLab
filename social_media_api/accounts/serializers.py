@@ -7,7 +7,6 @@ from rest_framework.authtoken.models import Token
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    # Explicit CharField for username
     username = serializers.CharField(
         required=True,
         max_length=150,
@@ -19,7 +18,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
     )
 
-    # Explicit CharField for email
     email = serializers.CharField(
         required=True,
         max_length=254,
@@ -29,7 +27,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
     )
 
-    # Explicit CharField for passwords
     password = serializers.CharField(
         write_only=True, 
         required=True, 
@@ -57,7 +54,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         }
     )
 
-    # Token field
     token = serializers.CharField(read_only=True)
 
     class Meta:
@@ -71,9 +67,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, data):
-        """
-        Validate that passwords match
-        """
+        """Validate that passwords match"""
         if data['password'] != data['password_confirm']:
             raise serializers.ValidationError({
                 "password": "Passwords do not match."
@@ -81,45 +75,25 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        """
-        Create user and generate authentication token
-        """
-        # Remove password_confirm before creating user
-        validated_data.pop('password_confirm')
+        """Create user and generate authentication token"""
+        validated_data.pop('password_confirm')  # Remove password_confirm before creating user
 
-        # Create user using create_user method
         user = get_user_model().objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password']
         )
 
-        # Create a token for the user
-        token = Token.objects.create(user=user)
-
-        # Attach the token to the user instance for serializer response
-        user.token = token.key
+        token = Token.objects.create(user=user)  # Create a token for the user
+        user.token = token.key  # Attach the token to the user instance
 
         return user
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    # Explicit CharField for username in profile
-    username = serializers.CharField(
-        read_only=True,
-        max_length=150
-    )
-
-    # Explicit CharField for email in profile
-    email = serializers.CharField(
-        read_only=True,
-        max_length=254
-    )
+    username = serializers.CharField(read_only=True, max_length=150)
+    email = serializers.CharField(read_only=True, max_length=254)
 
     class Meta:
         model = User
-        fields = [
-            'id', 
-            'username', 
-            'email'
-        ]
+        fields = ['id', 'username', 'email']
         read_only_fields = ['id']
