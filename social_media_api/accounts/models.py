@@ -4,16 +4,13 @@ from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 
 class CustomUser(AbstractUser):
-    """
-    Extended User model with additional fields for social media functionality
-    """
-    email = models.EmailField(_('email address'), unique=True)
-    bio = models.TextField(
-        _('bio'), 
-        max_length=500, 
-        blank=True, 
-        null=True
-    )
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    followers = models.ManyToManyField("self", symmetrical=False, related_name="following", blank=True)
+
+    def __str__(self):
+        return self.username
+    
     profile_picture = models.ImageField(
         _('profile picture'), 
         upload_to='profile_pics/', 
