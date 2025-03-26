@@ -6,7 +6,7 @@ from django.core.validators import RegexValidator
 class CustomUser(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    followers = models.ManyToManyField("self", symmetrical=False, related_name="following", blank=True)
+    followers = models.ManyToManyField("self", symmetrical=False, related_name="followers", blank=True)
 
     def __str__(self):
         return self.username
@@ -69,3 +69,4 @@ class CustomUser(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         ordering = ['-date_joined']
+

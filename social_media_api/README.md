@@ -276,3 +276,41 @@ API Documentation:
 Include usage examples in README.md.
 
 
+## User Follow and Feed Functionality
+
+### Follow Management Endpoints
+
+#### Follow a User
+- **Endpoint:** `POST /accounts/follow/<user_id>/`
+- **Authentication:** Required
+- **Description:** Allow the current user to follow another user
+- **Response:**
+  - `200 OK`: Successfully followed/already following
+  - `400 BAD REQUEST`: Cannot follow self
+
+#### Unfollow a User
+- **Endpoint:** `POST /accounts/unfollow/<user_id>/`
+- **Authentication:** Required
+- **Description:** Allow the current user to unfollow a previously followed user
+- **Response:**
+  - `200 OK`: Successfully unfollowed/not following
+
+### User Feed Endpoint
+
+#### Retrieve User Feed
+- **Endpoint:** `GET /posts/feed/`
+- **Authentication:** Required
+- **Description:** Retrieve posts from users the current user follows
+- **Response:**
+  - `200 OK`: List of posts from followed users
+  - If no posts are available, returns a message indicating an empty feed
+
+### Model Changes
+- Added `following` field to `CustomUser` model
+- `following` is a many-to-many relationship to itself
+- Allows tracking of user follow relationships
+
+### Implementation Notes
+- Users cannot follow themselves
+- Feed shows most recent posts first
+- Feed returns an empty list with a message if no posts are available
